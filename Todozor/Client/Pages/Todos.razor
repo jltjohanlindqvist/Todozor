@@ -1,0 +1,41 @@
+@page "/todos"
+@using Todozor.Shared
+@inject HttpClient Http
+
+<h1>Todos</h1>
+
+@if (todos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todo in todos)
+            {
+                <tr>
+                    <td>@todo.Title</td>
+                    <td>@todo.Text</td>
+                    <td>@todo.Completed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private TodoItem[] todos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        todos = await Http.GetFromJsonAsync<TodoItem[]>("Todo");
+    }
+}
